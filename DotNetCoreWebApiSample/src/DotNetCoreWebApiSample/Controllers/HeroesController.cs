@@ -28,28 +28,62 @@ namespace DotNetCoreWebApiSample.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        /// <summary>
+        /// Retrieves the Hero By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}", Name = "GetHero")]
+        public IActionResult Get(int id)
         {
-            return "value";
+            // We are creating a named route here with Name as "GetHero
+            var item = heroRepo.Find(id);
+            if(item == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(item);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]Hero hero)
         {
+            if(hero == null)
+            {
+                return BadRequest();
+            }
+
+            heroRepo.Add(hero);
+            return CreatedAtRoute("GetHero", new { id = hero.Id }, hero);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody]Hero hero)
         {
+            if(hero == null || hero.Id != id)
+            {
+                return BadRequest();
+            }
+
+            // Call the repository update
+            heroRepo.Update(hero);
+            return new NoContentResult();
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var item = heroRepo.Find(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            heroRepo.Remove(id);
+            return new NoContentResult();
         }
     }
 }

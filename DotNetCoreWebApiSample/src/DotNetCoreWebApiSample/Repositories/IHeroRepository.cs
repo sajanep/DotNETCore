@@ -8,10 +8,10 @@ namespace DotNetCoreWebApiSample.Repositories
 {
     public interface IHeroRepository
     {
-        //void Add(Hero item);
+        void Add(Hero item);
         IEnumerable<Hero> GetAll();
         Hero Find(int id);
-        //Hero Remove(int id);
-        //void Update(Hero item);
+        Hero Remove(int id);
+        void Update(Hero item);
     }
 }

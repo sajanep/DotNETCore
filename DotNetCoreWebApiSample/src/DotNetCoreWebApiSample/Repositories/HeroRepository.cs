@@ -1,5 +1,6 @@
 ﻿using DotNetCoreWebApiSample.Data;
 using DotNetCoreWebApiSample.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,34 @@ namespace DotNetCoreWebApiSample.Repositories
 
         public IEnumerable<Hero> GetAll()
         {
-            return heroContext.Heroes.ToList();
+            return heroContext.Set<Hero>().ToList();
         }
 
         public Hero Find(int id)
         {
-            return heroContext.Heroes.Find(id);
+            return heroContext.Set<Hero>().Find(id);
+        }
+
+        public void Add(Hero item)
+        {
+            heroContext.Set<Hero>().Add(item);
+            heroContext.SaveChanges();
+        }
+              
+        public void Update(Hero item)
+        {
+            heroContext.Set<Hero>().Attach(item);
+            heroContext.Entry(item).State = EntityState.Modified;
+            heroContext.SaveChanges();
+        }
+
+        public Hero Remove(int id)
+        {
+            var heroToDelete = heroContext.Set<Hero>().Find(id);
+            heroContext.Set<Hero>().Attach(heroToDelete);
+            heroContext.Entry(heroToDelete).State = EntityState.Deleted;
+            heroContext.SaveChanges();
+            return heroToDelete;
         }
     }
 }

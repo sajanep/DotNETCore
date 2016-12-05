@@ -37,7 +37,7 @@ namespace DotNetCoreWebApiSample
             services.AddDbContext<HeroContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddSingleton<IHeroRepository, HeroRepository>();
+            services.AddScoped<IHeroRepository, HeroRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +45,8 @@ namespace DotNetCoreWebApiSample
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            loggerFactory.AddFile("Logs/myapp-{Date}.txt");
 
             app.UseMvc();
         }
