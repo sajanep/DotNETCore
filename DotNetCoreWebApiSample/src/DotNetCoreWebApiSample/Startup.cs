@@ -10,6 +10,10 @@ using Microsoft.Extensions.Logging;
 using DotNetCoreWebApiSample.Repositories;
 using Microsoft.EntityFrameworkCore;
 using DotNetCoreWebApiSample.Data;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using DotNetCoreWebApiSample.Models;
+using System.Text;
 
 namespace DotNetCoreWebApiSample
 {
@@ -47,6 +51,34 @@ namespace DotNetCoreWebApiSample
             loggerFactory.AddDebug();
 
             loggerFactory.AddFile("Logs/myapp-{Date}.txt");
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler(errorApp =>
+                {
+                    errorApp.Run(async context =>
+                    {
+                        context.Response.StatusCode = 500; // or another Status accordingly to Exception Type
+                        context.Response.ContentType = "application/json";
+
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if (error != null)
+                        {
+                            var ex = error.Error;
+                            await context.Response.WriteAsync(new ErrorDTO()
+                            {
+                                Code = 500,
+                                Message = ex.Message // or your custom message
+                                                     // other custom data
+                            }.ToString(), Encoding.UTF8);
+                        }
+                    });
+                });
+            }
 
             app.UseMvc();
         }

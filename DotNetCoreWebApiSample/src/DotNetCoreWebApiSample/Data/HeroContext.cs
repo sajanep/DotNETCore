@@ -11,7 +11,6 @@ namespace DotNetCoreWebApiSample.Data
     {
         public HeroContext(DbContextOptions<HeroContext> options):base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

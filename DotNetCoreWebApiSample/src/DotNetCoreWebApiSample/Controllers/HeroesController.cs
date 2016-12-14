@@ -33,7 +33,7 @@ namespace DotNetCoreWebApiSample.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}", Name = "GetHero")]
+        [HttpGet("{id:int}", Name = "GetHero")]
         public IActionResult Get(int id)
         {
             // We are creating a named route here with Name as "GetHero
