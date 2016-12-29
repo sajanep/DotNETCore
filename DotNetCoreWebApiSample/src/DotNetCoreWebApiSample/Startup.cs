@@ -35,11 +35,17 @@ namespace DotNetCoreWebApiSample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddOptions();
+
             // Add framework services.
             services.AddMvc();
 
             services.AddDbContext<HeroContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Configure using a sub-section of the appsettings.json file.
+            services.Configure<MySettings>(Configuration.GetSection("MySettings"));
 
             services.AddScoped<IHeroRepository, HeroRepository>();
         }

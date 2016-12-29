@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using DotNetCoreWebApiSample.Models;
 
 namespace DotNetCoreWebApiSample.Controllers
 {
@@ -12,10 +14,14 @@ namespace DotNetCoreWebApiSample.Controllers
     {
         private ILogger<ValuesController> logger;
 
-        public ValuesController(ILogger<ValuesController> logger)
+        private MySettings mySettingsAccessor;
+
+        public ValuesController(ILogger<ValuesController> logger, IOptions<MySettings> mySettingsAccessor)
         {
             this.logger = logger;
+            this.mySettingsAccessor = mySettingsAccessor.Value;
         }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
@@ -47,6 +53,19 @@ namespace DotNetCoreWebApiSample.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpGet("GetAppSettings")]
+        public IEnumerable<string> GetAppSettings()
+        {
+            var applicationName = mySettingsAccessor.ApplicationName;
+            var fileUploadMaxSize = mySettingsAccessor.FileUploadMaxSize;
+            var fileUploadPath = mySettingsAccessor.FileUploadPath;
+            return new string[] {
+                $"ApplicationName = {applicationName}",
+                $"FileUploadMaxSize = {fileUploadMaxSize}",
+                $"FileUploadPath = {fileUploadPath}"
+            };
         }
     }
 }
