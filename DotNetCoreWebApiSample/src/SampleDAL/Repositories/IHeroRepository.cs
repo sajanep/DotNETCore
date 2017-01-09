@@ -1,10 +1,10 @@
-﻿using DotNetCoreWebApiSample.Models;
+﻿using SampleDAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotNetCoreWebApiSample.Repositories
+namespace SampleDAL.Repositories
 {
     public interface IHeroRepository
     {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotNetCoreWebApiSample.Models
+namespace SampleDAL.Models
 {
     public class Hero
     {
